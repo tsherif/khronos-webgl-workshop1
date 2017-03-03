@@ -4,7 +4,7 @@
 </head>
 <body>
 	<canvas id="webgl-canvas"></canvas>
-	<script type="vetex-shader" id="vs">
+	<script type="vertex-shader" id="vs">
 		attribute vec4 position;
 		attribute vec3 color;
 		varying vec3 vColor;
@@ -26,9 +26,11 @@
 	<script type="fragment-shader" id="fs">
 		precision highp float;
 		varying vec3 vColor;
-		
+		uniform float time;
+
 		void main() {
-			gl_FragColor = vec4(vColor, 1.0);
+			float t = time * 0.001;
+			gl_FragColor = vec4(vColor, 1.0) + vec4(sin(t), cos(t), sin(t) + cos(t), 1.0);
 		}
 	</script>
 	<script>
@@ -67,15 +69,34 @@
 		gl.shaderSource(vs, vsSource);
 		gl.compileShader(vs);
 
+		if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+			console.error(gl.getShaderInfoLog(vs));
+			var lines = vsSource.split("\n");
+			for (var i = 0; i < lines.length; ++i) {
+				console.error((i + 1) + ": ", lines[i]);
+			}
+		}
+
 		var fs = gl.createShader(gl.FRAGMENT_SHADER);
 		gl.shaderSource(fs, fsSource);
 		gl.compileShader(fs);
 
+		if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+			console.error(gl.getShaderInfoLog(fs));
+			var lines = vsSource.split("\n");
+			for (var i = 0; i < lines.length; ++i) {
+				console.error((i + 1) + ": ", lines[i]);
+			}
+		}
+
 		var program = gl.createProgram();
 		gl.attachShader(program, vs);
 		gl.attachShader(program, fs);
-
 		gl.linkProgram(program);
+
+		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+			console.error("Link error:", gl.getProgramInfoLog(program));
+		}
 
 		gl.useProgram(program);
 
