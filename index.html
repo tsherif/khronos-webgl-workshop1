@@ -78,6 +78,39 @@
       </section>
 
       <section>
+        <h2>Client/Server Model</h2>
+        <ul>
+          <li>JavaScript code is the client</li>
+          <li>GPU is the server</li>
+          <li>
+            JavaScript code sends commands and data to the GPU via WebGL
+            <ul>
+              <li>gl.bufferData(...)</li>
+              <li>gl.drawArrays(...)</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>State Machine</h2>
+        <ul>
+          <li>
+            WebGL commands set up state on the GPU
+            <ul>
+              E.g. Geometry, colors, etc.
+            </ul>
+          </li>
+          <li>That state is used in the next draw command.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>State Machine</h2>
+        <img src="img/client-server.png">
+      </section>
+
+      <section>
         <h2>Describe Geometry</h2>
         <ul><li>Array of vertex data</li></ul>
         <pre>
